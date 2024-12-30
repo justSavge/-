@@ -1,0 +1,7 @@
+1.在最新的react,虚拟dom不是有React.createElement创建了，而是由jsxDEV创建，一个显著的优点是不用再引入React-----import React from "react"; // 无需再写这段代码了
+2.jsxDEV接受三个参数，组件名（div,MyCom），config参数(props包括children)，key
+3.虚拟dom包含了参数：$$typeof(什么类型的虚拟dom),key(key),ref(标签ref),type(标签名),props.
+4.使用{...props}传递的key优先级要比key=?高，因为这里的{...props}的会进入到jsxDEV的config再进入虚拟dom.(ps:不过两个key肯定会报错的)
+5.以前使用的ReactDom.render()是一个同步的方法,现在使用createRoot()可以在并发的前提下运行（不是真的并发而是利用渲染，更新的时间切片，使得渲染组件时间可以中断，
+提升性能）。接受一个页面的真实节点，返回一个FiberRoot
+https://juejin.cn/post/7310156414252711936 1/3

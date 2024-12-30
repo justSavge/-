@@ -1,0 +1,33 @@
+1.使用npm link发布到全局。
+2.使用npm run dev进行热更新。
+3.直接使用该包开发。
+弯路：
+1.打包本地包
+2.使用package.json的‘file:../xx’来使用本地包。
+不知出于何种原因，失败了
+经验：
+发现依赖包用的是打包以后的文件。每次修改手动打包就太复杂了。由于几乎只修改一个文件，所以对这个文件进行监听，一旦文件变化就
+重新打包即可。
+逻辑很简单，监听文件，执行命令
+参考代码
+const { exec } = require('child_process')
+const chokidar = require('chokidar')
+
+// 监听的文件或目录
+const watchPath = './lib/model.tsx'
+// 当文件变化时执行的命令
+const buildCommand = 'npm run build:esm'
+
+chokidar.watch(watchPath).on('all', (event, path) => {
+  console.log(`File ${path} has been ${event}`)
+  exec(buildCommand, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error building project: ${error.message}`)
+      return
+    }
+    if (stderr) {
+      console.error(`Build stderr: ${stderr}`)
+    }
+    console.log(`Build stdout: ${stdout}`)
+  })
+})
